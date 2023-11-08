@@ -287,11 +287,13 @@ public class UserController {
 
                             //Luu vao bang train
                             trainedModel trainedModel = new trainedModel();
+                            int modelID = modelRepository.findMaxID();
                             trainedModel.setBox(box_avg);
                             trainedModel.setCls(cls_avg);
                             trainedModel.setObj(obj_avg);
                             trainedModel.setTotal(obj_avg);
                             trainedModel.setEpoch(1);
+                            trainedModel.setModelID(modelID);
                             trainedModelRepository.save(trainedModel);
 
                             //Luu data vao sample
@@ -299,7 +301,6 @@ public class UserController {
                                 Optional<Sample> sampleTemp = sampleRepository.findById(Long.valueOf(id));
                                 Sample sample1 = sampleTemp.get();
                                 Sample sample = new Sample();
-                                int modelID = modelRepository.findMaxID();
 
                                 sample.setName(sample1.getName());
                                 sample.setPathLabel(sample1.getPathLabel());
@@ -309,7 +310,6 @@ public class UserController {
                             }
 
                             //Luu data vao bang trung gian sample va train
-                            int modelID = modelRepository.findMaxID();
                             int trainedID = trainedModelRepository.findMaxID();
                             List<Sample> sampleList = sampleRepository.findBymodelID((long) modelID);
                             for (Sample temp : sampleList){
@@ -416,13 +416,15 @@ public class UserController {
         detailModelDTO.setSamples(samples);
 
         // Lấy danh sách TrainedModel từ SampleTrained
-        for (Sample sample : samples) {
-            List<SampleTrained> sampleTrainedList = sampleTrainedRepository.findBysampleID(sample.getId());
-            for (SampleTrained sampleTrained : sampleTrainedList) {
-                trainedModel trainedModel = trainedModelRepository.findById((long) sampleTrained.getTrainedID()).orElse(null);
-                detailModelDTO.addTrainedModel(trainedModel);
-            }
-        }
+//        for (Sample sample : samples) {
+//            List<SampleTrained> sampleTrainedList = sampleTrainedRepository.findBysampleID(sample.getId());
+//            for (SampleTrained sampleTrained : sampleTrainedList) {
+//                trainedModel trainedModel = trainedModelRepository.findById((long) sampleTrained.getTrainedID()).orElse(null);
+//                detailModelDTO.addTrainedModel(trainedModel);
+//            }
+//        }
+        List<trainedModel> trainedModelList = trainedModelRepository.findByModelID(id);
+        detailModelDTO.setTrainedModels(trainedModelList);
         return detailModelDTO;
     }
 

@@ -1,5 +1,4 @@
 @extends('template.master')
-{{-- Trang chủ GIao Ban --}}
 @section('title', 'Chi tiết Model')
 @section('header-style')
 <style>

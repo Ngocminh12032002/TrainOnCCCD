@@ -28,4 +28,7 @@ public class trainedModel {
     @Column
     private double obj;
 
+    @Column
+    private long modelID;
+
 }
